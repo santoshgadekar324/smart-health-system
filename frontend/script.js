@@ -1,61 +1,76 @@
+```javascript
 /**
  * script.js — SmartHealth Core JS
- * - API wrapper (all fetch calls)
- * - Auth token management
- * - Dashboard tab routing
  */
 
-// ─── Config ──────────────────────────────────────────────────
+// CONFIG
 const CONFIG = {
-  API_BASE: 'https://smart-health-backend-ohre.onrender.com/api',
-  TOKEN_KEY: 'sh_token',
-  USER_KEY: 'sh_user',
+  API_BASE: "https://smart-health-backend-ohre.onrender.com/api",
+  TOKEN_KEY: "sh_token",
+  USER_KEY: "sh_user"
 };
 
-// ─── Token helpers ───────────────────────────────────────────
+
+// AUTH STORAGE
 const Auth = {
-  setToken:  (t) => localStorage.setItem(CONFIG.TOKEN_KEY, t),
-  getToken:  ()  => localStorage.getItem(CONFIG.TOKEN_KEY),
-  setUser:   (u) => localStorage.setItem(CONFIG.USER_KEY, JSON.stringify(u)),
-  getUser:   ()  => {
+  setToken: (t) => localStorage.setItem(CONFIG.TOKEN_KEY, t),
+
+  getToken: () => localStorage.getItem(CONFIG.TOKEN_KEY),
+
+  setUser: (u) =>
+    localStorage.setItem(CONFIG.USER_KEY, JSON.stringify(u)),
+
+  getUser: () => {
     const raw = localStorage.getItem(CONFIG.USER_KEY);
     return raw ? JSON.parse(raw) : null;
   },
-  clear:     ()  => {
+
+  clear: () => {
     localStorage.removeItem(CONFIG.TOKEN_KEY);
     localStorage.removeItem(CONFIG.USER_KEY);
   },
-  isLoggedIn: () => !!localStorage.getItem(CONFIG.TOKEN_KEY),
+
+  isLoggedIn: () => !!localStorage.getItem(CONFIG.TOKEN_KEY)
 };
 
-// ─── Fetch wrapper ───────────────────────────────────────────
+
+// API FETCH WRAPPER
 async function apiFetch(path, options = {}) {
+
   const token = Auth.getToken();
-  const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
-  if (token) headers['Authorization'] = `Bearer ${token}`;
+
+  const headers = {
+    "Content-Type": "application/json",
+    ...(options.headers || {})
+  };
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
 
   const res = await fetch(CONFIG.API_BASE + path, {
     ...options,
-    headers,
+    headers
   });
 
-  // Auto-logout on 401
   if (res.status === 401) {
     Auth.clear();
-    window.location.href = 'login.html';
+    window.location.href = "login.html";
     return;
   }
 
   return res.json();
 }
 
-// ─── API methods ─────────────────────────────────────────────
+
+// API METHODS
 const API = {
-  // Auth
+
+  // AUTH
   login: (email, password) =>
-    apiFetch('/auth/login', {
-      method: 'POST',
-      body: JSON.stringify({ email, password }),
+    apiFetch("/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ email, password })
     }).then(res => {
       if (res?.success && res.data?.token) {
         Auth.setToken(res.data.token);
@@ -65,164 +80,210 @@ const API = {
     }),
 
   register: (payload) =>
-    apiFetch('/auth/register', {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    }).then(res => {
-      if (res?.success && res.data?.token) {
-        Auth.setToken(res.data.token);
-        Auth.setUser(res.data);
-      }
-      return res;
+    apiFetch("/auth/register", {
+      method: "POST",
+      body: JSON.stringify(payload)
     }),
 
-  // Patient
-addSymptoms: (symptoms, notes) =>
-  apiFetch('/predictions', {
-    method: 'POST',
-    body: JSON.stringify({ symptoms, notes }),
-  }),
+  // DOCTORS
+  getDoctors: () => apiFetch("/doctors"),
 
-getPredictions: () => apiFetch('/predictions'),
+  getDoctorById: (id) =>
+    apiFetch(`/doctors/${id}`),
 
-getAppointments: () => apiFetch('/appointments'),
+  getDoctorsBySpecialization: (specialization) =>
+    apiFetch(`/doctors/specialization/${encodeURIComponent(specialization)}`),
 
-bookAppointment: (payload) =>
-  apiFetch('/appointments', {
-    method: 'POST',
-    body: JSON.stringify(payload),
-  }),
+  getAvailableDoctors: () =>
+    apiFetch("/doctors/available"),
 
-getDoctors: () => apiFetch('/doctors'),
-  // Doctor
-  getDoctorAppointments: () => apiFetch('/doctor/appointments'),
+  // APPOINTMENTS
+  getAppointments: () =>
+    apiFetch("/appointments"),
 
-  updateAppointment: (id, payload) =>
-    apiFetch(`/doctor/updateAppointment/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(payload),
+  bookAppointment: (payload) =>
+    apiFetch("/appointments", {
+      method: "POST",
+      body: JSON.stringify(payload)
     }),
 
-  getDoctorProfile: () => apiFetch('/doctor/profile'),
-
-  updateDoctorProfile: (payload) =>
-    apiFetch('/doctor/profile', {
-      method: 'PUT',
-      body: JSON.stringify(payload),
+  updateAppointmentStatus: (id, status) =>
+    apiFetch(`/appointments/${id}/status?status=${status}`, {
+      method: "PUT"
     }),
 
-  // Admin
-  getUsers: () => apiFetch('/admin/manageUsers'),
+  deleteAppointment: (id) =>
+    apiFetch(`/appointments/${id}`, {
+      method: "DELETE"
+    }),
 
-  toggleUser: (id) =>
-    apiFetch(`/admin/manageUsers/${id}/toggle`, { method: 'PUT' }),
+  // ADMIN (SAFE FALLBACK)
+  getUsers: async () => {
+    console.warn("Admin API not implemented yet");
+    return [];
+  },
 
-  getAdminDoctors: () => apiFetch('/admin/manageDoctors'),
-
-  verifyDoctor: (id) =>
-    apiFetch(`/admin/manageDoctors/${id}/verify`, { method: 'PUT' }),
-
-  getAdminAppointments: () => apiFetch('/admin/manageAppointments'),
-
-  getAnalytics: () => apiFetch('/admin/analytics'),
+  getAnalytics: async () => {
+    console.warn("Analytics API not implemented yet");
+    return {};
+  }
 };
 
-// ─── Dashboard Tab Switcher ──────────────────────────────────
+
+// DASHBOARD TABS
 function initTabs() {
-  const links = document.querySelectorAll('.sidebar-link[data-tab]');
+
+  const links = document.querySelectorAll(".sidebar-link[data-tab]");
+
   links.forEach(link => {
-    link.addEventListener('click', (e) => {
+
+    link.addEventListener("click", (e) => {
+
       e.preventDefault();
+
       const tab = link.dataset.tab;
+
       switchTab(tab);
+
     });
+
   });
+
 }
 
 function switchTab(tabId) {
-  // Hide all tabs
-  document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
-  // Deactivate sidebar links
-  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
 
-  // Show target tab
-  const target = document.getElementById('tab-' + tabId);
-  if (target) target.classList.add('active');
+  document.querySelectorAll(".dash-tab")
+    .forEach(t => t.classList.remove("active"));
 
-  // Activate sidebar link
+  document.querySelectorAll(".sidebar-link")
+    .forEach(l => l.classList.remove("active"));
+
+  const target = document.getElementById("tab-" + tabId);
+
+  if (target) target.classList.add("active");
+
   const activeLink = document.querySelector(`.sidebar-link[data-tab="${tabId}"]`);
-  if (activeLink) activeLink.classList.add('active');
 
-  // Update topbar title
-  const titleEl = document.getElementById('topbarTitle');
-  if (titleEl && activeLink) titleEl.textContent = activeLink.textContent.trim();
+  if (activeLink) activeLink.classList.add("active");
 
-  // Close sidebar on mobile
-  document.getElementById('sidebar')?.classList.remove('open');
 }
 
-// ─── Sidebar toggle (mobile) ─────────────────────────────────
+
+// SIDEBAR TOGGLE
 function initSidebarToggle() {
-  const btn = document.getElementById('sidebarToggle');
-  const sidebar = document.getElementById('sidebar');
+
+  const btn = document.getElementById("sidebarToggle");
+
+  const sidebar = document.getElementById("sidebar");
+
   if (btn && sidebar) {
-    btn.addEventListener('click', () => sidebar.classList.toggle('open'));
-  }
-}
 
-// ─── Logout ─────────────────────────────────────────────────
-function initLogout() {
-  const btn = document.getElementById('logoutBtn');
-  if (btn) {
-    btn.addEventListener('click', () => {
-      Auth.clear();
-      window.location.href = 'login.html';
+    btn.addEventListener("click", () => {
+
+      sidebar.classList.toggle("open");
+
     });
+
   }
+
 }
 
-// ─── User info in topbar ────────────────────────────────────
+
+// LOGOUT
+function initLogout() {
+
+  const btn = document.getElementById("logoutBtn");
+
+  if (btn) {
+
+    btn.addEventListener("click", () => {
+
+      Auth.clear();
+
+      window.location.href = "login.html";
+
+    });
+
+  }
+
+}
+
+
+// USER INFO
 function initUserInfo() {
+
   const user = Auth.getUser();
-  if (user) {
-    const nameEl = document.getElementById('userName');
-    const avatarEl = document.getElementById('userAvatar');
-    if (nameEl) nameEl.textContent = user.fullName || user.email;
-    if (avatarEl) avatarEl.textContent = (user.fullName || 'U')[0].toUpperCase();
+
+  if (!user) return;
+
+  const nameEl = document.getElementById("userName");
+
+  const avatarEl = document.getElementById("userAvatar");
+
+  if (nameEl) {
+    nameEl.textContent = user.fullName || user.email;
   }
+
+  if (avatarEl) {
+    avatarEl.textContent = (user.fullName || "U")[0].toUpperCase();
+  }
+
 }
 
-// ─── Guard: redirect if not logged in ───────────────────────
-function requireAuth(expectedRole) {
+
+// AUTH GUARD
+function requireAuth(role) {
+
   if (!Auth.isLoggedIn()) {
-    window.location.href = 'login.html';
+
+    window.location.href = "login.html";
+
     return false;
+
   }
+
   const user = Auth.getUser();
-  if (expectedRole && user?.role !== expectedRole) {
-    window.location.href = 'login.html';
+
+  if (role && user?.role !== role) {
+
+    window.location.href = "login.html";
+
     return false;
+
   }
+
   return true;
+
 }
 
-// ─── Status badge helper ─────────────────────────────────────
-function statusBadge(status) {
-  return `<span class="status-badge badge-${status.toLowerCase()}">${status}</span>`;
-}
 
-// ─── Date formatter ──────────────────────────────────────────
+// DATE FORMAT
 function fmtDate(dateStr) {
-  if (!dateStr) return '—';
-  return new Date(dateStr).toLocaleDateString('en-IN', {
-    day: '2-digit', month: 'short', year: 'numeric'
+
+  if (!dateStr) return "-";
+
+  return new Date(dateStr).toLocaleDateString("en-IN", {
+
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+
   });
+
 }
 
-// ─── Init on page load ───────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
+
+// INIT
+document.addEventListener("DOMContentLoaded", () => {
+
   initTabs();
+
   initSidebarToggle();
+
   initLogout();
+
   initUserInfo();
+
 });
+```
