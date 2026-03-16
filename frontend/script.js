@@ -77,25 +77,23 @@ const API = {
     }),
 
   // Patient
-  addSymptoms: (symptoms, notes) =>
-    apiFetch('/patient/addSymptoms', {
-      method: 'POST',
-      body: JSON.stringify({ symptoms, notes }),
-    }),
+addSymptoms: (symptoms, notes) =>
+  apiFetch('/predictions', {
+    method: 'POST',
+    body: JSON.stringify({ symptoms, notes }),
+  }),
 
-  getPredictions: () => apiFetch('/patient/predictions'),
+getPredictions: () => apiFetch('/predictions'),
 
-  getAppointments: () => apiFetch('/patient/appointments'),
+getAppointments: () => apiFetch('/appointments'),
 
-  bookAppointment: (payload) =>
-    apiFetch('/patient/bookAppointment', {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    }),
+bookAppointment: (payload) =>
+  apiFetch('/appointments', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  }),
 
-  getDoctors: (specialty = '') =>
-    apiFetch('/patient/doctors' + (specialty ? `?specialty=${encodeURIComponent(specialty)}` : '')),
-
+getDoctors: () => apiFetch('/doctors'),
   // Doctor
   getDoctorAppointments: () => apiFetch('/doctor/appointments'),
 
