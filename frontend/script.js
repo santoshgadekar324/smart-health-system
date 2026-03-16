@@ -7,7 +7,7 @@
 
 // ─── Config ──────────────────────────────────────────────────
 const CONFIG = {
-  API_BASE: 'http://localhost:8080/api',
+  API_BASE: 'https://smart-health-backend-ohre.onrender.com/api',
   TOKEN_KEY: 'sh_token',
   USER_KEY: 'sh_user',
 };
