@@ -49,35 +49,54 @@ const Auth = {
 /* =========================
    API FETCH
 ========================= */
-
 async function apiFetch(path, options = {}) {
 
-  const token = Auth.getToken();
+  try {
 
-  const headers = {
-    "Content-Type": "application/json",
-    ...(options.headers || {})
-  };
+    const token = Auth.getToken();
 
-  if (token) {
-    headers["Authorization"] = "Bearer " + token;
+    const headers = {
+      "Content-Type": "application/json",
+      ...(options.headers || {})
+    };
+
+    if (token) {
+      headers["Authorization"] = "Bearer " + token;
+    }
+
+    const response = await fetch(CONFIG.API_BASE + path, {
+      ...options,
+      headers
+    });
+
+    // ❗ Unauthorized
+    if (response.status === 401) {
+      Auth.clear();
+      window.location.href = "login.html";
+      return null;
+    }
+
+    // ❗ Backend down / error
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error("Server error: " + response.status + " " + text);
+    }
+
+    // ❗ Safe JSON parse
+    const data = await response.json();
+
+    return data;
+
+  } catch (error) {
+
+    console.error("🔥 API ERROR:", error);
+
+    alert("⚠️ Backend sleeping / slow.\nWait 20 sec and refresh.");
+
+    return null;
   }
-
-  const response = await fetch(CONFIG.API_BASE + path, {
-    ...options,
-    headers
-  });
-
-  if (response.status === 401) {
-    Auth.clear();
-    window.location.href = "login.html";
-    return;
-  }
-
-  return response.json();
 
 }
-
 
 /* =========================
    API METHODS
