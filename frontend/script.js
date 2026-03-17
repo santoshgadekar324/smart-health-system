@@ -1,4 +1,4 @@
-```javascript
+
 /*
  Smart Health System - script.js
  Clean version for backend integration
@@ -193,4 +193,3 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("Smart Health System loaded");
 
 });
-```
