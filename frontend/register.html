@@ -101,33 +101,35 @@
     const spinner = document.getElementById('regSpinner');
     btn.disabled = true;
     spinner.classList.remove('d-none');
+    
+ const payload = {
+  fullName: document.getElementById('fullName').value.trim(),
+  email: document.getElementById('email').value.trim(),
+  password: pwd,
+  role: document.getElementById('role').value.toUpperCase()
+};
+try {
+  const res = await API.register(payload);
 
-    const payload = {
-      fullName: document.getElementById('fullName').value.trim(),
-      email:    document.getElementById('email').value.trim(),
-      password: pwd,
-      phone:    document.getElementById('phone').value.trim(),
-      gender:   document.getElementById('gender').value || null,
-      dateOfBirth: document.getElementById('dob').value || null,
-      role:     document.getElementById('role').value,
-    };
+  if (res && res.token) {
+    showAlert('Account created! Redirecting…', 'success');
 
-    try {
-      const res = await API.register(payload);
-      if (res.success) {
-        showAlert('Account created! Redirecting…', 'success');
-        setTimeout(() => {
-          const role = res.data.role;
-          window.location.href = role === 'PATIENT' ? 'patient-dashboard.html'
-                               : role === 'DOCTOR'  ? 'doctor-dashboard.html'
-                               : 'admin-dashboard.html';
-        }, 800);
-      } else {
-        showAlert(res.message || 'Registration failed.', 'danger');
-      }
-    } catch (err) {
-      showAlert('Network error. Is the backend running?', 'danger');
-    } finally {
+    localStorage.setItem("sh_token", res.token);
+
+    setTimeout(() => {
+      const role = res.role;
+      window.location.href = role === 'PATIENT' ? 'patient-dashboard.html'
+                           : role === 'DOCTOR'  ? 'doctor-dashboard.html'
+                           : 'admin-dashboard.html';
+    }, 800);
+
+  } else {
+    showAlert('Registration failed.', 'danger');
+  }
+
+} catch (err) {
+  showAlert('Backend error. Try again.', 'danger');
+} finally {
       btn.disabled = false;
       spinner.classList.add('d-none');
     }
