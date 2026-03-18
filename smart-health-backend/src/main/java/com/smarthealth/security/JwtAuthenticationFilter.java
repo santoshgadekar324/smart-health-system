@@ -22,17 +22,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserDetailsServiceImpl userDetailsService;
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
-        String path = request.getServletPath();
+  @Override
+protected void doFilterInternal(HttpServletRequest request,
+                                HttpServletResponse response,
+                                FilterChain filterChain)
+        throws ServletException, IOException {
 
-// ✅ Skip login & register endpoints
-if (path.startsWith("/api/auth/login") || path.startsWith("/api/auth/register")) {
-    filterChain.doFilter(request, response);
-    return;
-}
+    // ✅ STEP 3 FIX (VERY IMPORTANT)
+    if (request.getMethod().equals("OPTIONS")) {
+        filterChain.doFilter(request, response);
+        return;
+    }
+
+    String path = request.getServletPath();
+
+    // ✅ Skip login & register
+    if (path.startsWith("/api/auth/login") || path.startsWith("/api/auth/register")) {
+        filterChain.doFilter(request, response);
+        return;
+    }
         try {
             String jwt = getJwtFromRequest(request);
 
