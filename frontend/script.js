@@ -131,13 +131,16 @@ const API = {
 
   /* REGISTER */
   register(payload) {
-
-    return apiFetch("/auth/register", {
-      method: "POST",
-      body: JSON.stringify(payload)
-    });
-
-  },
+  return apiFetch("/auth/register", {
+    method: "POST",
+    body: JSON.stringify({
+      fullName: payload.fullName,
+      email: payload.email,
+      password: payload.password,
+      role: payload.role.toUpperCase() // ✅ IMPORTANT
+    })
+  });
+},
 
 
   /* DOCTORS */
