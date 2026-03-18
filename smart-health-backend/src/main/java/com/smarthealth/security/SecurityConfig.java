@@ -40,12 +40,18 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/doctors/**").permitAll()
-                        .requestMatchers("/api/predictions/**").permitAll()
-                        .anyRequest().authenticated()
-                )
+    // ✅ VERY IMPORTANT (fix 403)
+    .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+
+    // ✅ auth APIs allow
+    .requestMatchers("/api/auth/**").permitAll()
+
+    // बाकी
+    .requestMatchers("/api/doctors/**").permitAll()
+    .requestMatchers("/api/predictions/**").permitAll()
+
+    .anyRequest().authenticated()
+)
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -73,7 +79,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedOrigins(Arrays.asList(
+    "https://smart-health-system-seven.vercel.app"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(false);
