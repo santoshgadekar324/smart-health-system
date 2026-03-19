@@ -75,7 +75,7 @@ public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
 
     configuration.setAllowedOrigins(Arrays.asList(
-        "smart-health-system-50ja7w4dq-santoshgadekar324s-projects.vercel.app"
+        "https://smart-health-system-50ja7w4dq-santoshgadekar324s-projects.vercel.app"
     ));
 
     configuration.setAllowedMethods(Arrays.asList(
@@ -83,8 +83,7 @@ public CorsConfigurationSource corsConfigurationSource() {
     ));
 
     configuration.setAllowedHeaders(Arrays.asList("*"));
-
-    configuration.setAllowCredentials(true); // ✅ ONLY this (no false)
+    configuration.setAllowCredentials(true);
 
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration);
