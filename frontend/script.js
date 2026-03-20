@@ -164,7 +164,12 @@ const API = {
     return apiFetch("/doctors/available");
   },
 
-
+// =========================
+// DOCTOR PROFILE
+// =========================
+getDoctorProfile() {
+  return apiFetch("/doctors/profile");
+},
   /* APPOINTMENTS */
 
   getAppointments() {
