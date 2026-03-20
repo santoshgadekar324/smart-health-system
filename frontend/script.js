@@ -134,16 +134,15 @@ const API = {
   return apiFetch("/auth/register", {
     method: "POST",
     body: JSON.stringify({
-      fullName: payload.fullName,
+      name: payload.fullName, // ✅ FIXED
       email: payload.email,
       password: payload.password,
       role: payload.role.toUpperCase(),
       phone: payload.phone || "",
-      gender: payload.gender || "",
-      dateOfBirth: payload.dateOfBirth || ""
+      gender: payload.gender || ""
     })
   });
-},
+}
   /* DOCTORS */
 
   getDoctors() {
