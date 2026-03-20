@@ -139,7 +139,10 @@ const API = {
       password: payload.password,
       role: payload.role.toUpperCase(),
       phone: payload.phone || "",
-      gender: payload.gender || ""
+      gender: payload.gender || "",
+      specialization: payload.specialization,
+      qualification: payload.qualification,
+      experienceYears: payload.experienceYears
     })
   });
 },
