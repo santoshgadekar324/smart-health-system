@@ -137,12 +137,13 @@ const API = {
       fullName: payload.fullName,
       email: payload.email,
       password: payload.password,
-      role: payload.role.toUpperCase() // ✅ IMPORTANT
+      role: payload.role.toUpperCase(),
+      phone: payload.phone || "",
+      gender: payload.gender || "",
+      dateOfBirth: payload.dateOfBirth || ""
     })
   });
 },
-
-
   /* DOCTORS */
 
   getDoctors() {
