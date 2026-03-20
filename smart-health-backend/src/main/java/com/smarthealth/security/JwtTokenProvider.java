@@ -21,7 +21,9 @@ public class JwtTokenProvider {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpiration);
 
-        Key key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+       Key key = Keys.hmacShaKeyFor(
+    jwtSecret.getBytes(StandardCharsets.UTF_8)
+);
 
         return Jwts.builder()
                 .setSubject(email)
