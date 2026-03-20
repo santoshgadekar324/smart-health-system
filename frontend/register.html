@@ -52,6 +52,7 @@
             </select>
           </div>
           <div class="col-12">
+    <div id="doctorFields" style="disply:none;">
   <label class="form-label">Specialization</label>
   <input type="text" id="specialization" class="form-control" placeholder="Cardiologist" />
 </div>
@@ -65,13 +66,14 @@
   <label class="form-label">Experience (Years)</label>
   <input type="number" id="experienceYears" class="form-control" placeholder="5" />
 </div>
+          </div>
           <div class="col-md-6">
             <label class="form-label">Date of Birth</label>
             <input type="date" id="dob" class="form-control sh-input" />
           </div>
           <div class="col-md-6">
             <label class="form-label">Role</label>
-            <select id="role" class="form-select sh-input">
+            <select id="role" class="form-select sh-input" onchange="toggleRoleFields()">
               <option value="PATIENT">Patient</option>
               <option value="DOCTOR">Doctor</option>
             </select>
@@ -116,20 +118,20 @@
     btn.disabled = true;
     spinner.classList.remove('d-none');
     
+const role = document.getElementById('role').value.toUpperCase();
+
 const payload = {
   fullName: document.getElementById('fullName').value.trim(),
   email: document.getElementById('email').value.trim(),
   password: pwd,
-  role: document.getElementById('role').value.toUpperCase(),
+  role: role,
 
   phone: document.getElementById('phone').value || "",
   gender: document.getElementById('gender').value || "",
-  dateOfBirth: document.getElementById('dob').value || "",
 
-  // 🔥 ADD THESE (doctor fields)
-  specialization: document.getElementById('specialization')?.value || "",
-  qualification: document.getElementById('qualification')?.value || "",
-  experienceYears: document.getElementById('experienceYears')?.value || 0
+  specialization: role === "DOCTOR" ? document.getElementById('specialization').value : null,
+  qualification: role === "DOCTOR" ? document.getElementById('qualification').value : null,
+  experienceYears: role === "DOCTOR" ? document.getElementById('experienceYears').value : null
 };
 try {
   const res = await API.register(payload);
@@ -164,6 +166,16 @@ try {
     box.textContent = msg;
     box.classList.remove('d-none');
   }
+  function toggleRoleFields() {
+  const role = document.getElementById("role").value;
+  const doctorFields = document.getElementById("doctorFields");
+
+  if (role === "DOCTOR") {
+    doctorFields.style.display = "block";
+  } else {
+    doctorFields.style.display = "none";
+  }
+}
 </script>
 </body>
 </html>
