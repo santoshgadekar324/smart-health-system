@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import java.nio.charset.StandardCharsets;
 
 import java.security.Key;
 import java.util.Date;
@@ -17,24 +18,22 @@ public class JwtTokenProvider {
     @Value("${jwt.expiration:86400000}") // 24 hours
     private long jwtExpiration;
 
-    public String generateToken(String email) {
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + jwtExpiration);
+  public String generateToken(String email) {
+    Date now = new Date();
+    Date expiryDate = new Date(now.getTime() + jwtExpiration);
 
-       Key key = Keys.hmacShaKeyFor(
-    jwtSecret.getBytes(StandardCharsets.UTF_8)
-);
+    Key key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
 
-        return Jwts.builder()
-                .setSubject(email)
-                .setIssuedAt(now)
-                .setExpiration(expiryDate)
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
-    }
+    return Jwts.builder()
+            .setSubject(email)
+            .setIssuedAt(now)
+            .setExpiration(expiryDate)
+            .signWith(key, SignatureAlgorithm.HS256)
+            .compact();
+}
 
     public String getEmailFromToken(String token) {
-        Key key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+        Key key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
 
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
@@ -47,7 +46,7 @@ public class JwtTokenProvider {
 
     public boolean validateToken(String token) {
         try {
-            Key key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+           Key key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
             
             Jwts.parserBuilder()
                     .setSigningKey(key)
