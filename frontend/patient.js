@@ -251,3 +251,37 @@ function showInlineAlert(el, msg, type) {
 window.addEventListener('DOMContentLoaded', () => {
   loadDoctors();
 });
+// =========================
+// DASHBOARD TAB SWITCH (REAL FIX)
+// =========================
+document.querySelectorAll(".sidebar-link").forEach(link => {
+
+  link.addEventListener("click", function(e) {
+    e.preventDefault();
+
+    // remove active class
+    document.querySelectorAll(".sidebar-link").forEach(l => {
+      l.classList.remove("active");
+    });
+
+    this.classList.add("active");
+
+    // hide all tabs
+    document.querySelectorAll(".dash-tab").forEach(tab => {
+      tab.classList.remove("active");
+    });
+
+    // show selected tab
+    const tabName = this.getAttribute("data-tab");
+    const activeTab = document.getElementById("tab-" + tabName);
+
+    if (activeTab) {
+      activeTab.classList.add("active");
+    }
+
+    // update title
+    const title = this.textContent.trim();
+    document.getElementById("topbarTitle").innerText = title;
+  });
+
+});
