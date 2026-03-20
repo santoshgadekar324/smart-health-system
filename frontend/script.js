@@ -142,7 +142,7 @@ const API = {
       gender: payload.gender || ""
     })
   });
-}
+},
   /* DOCTORS */
 
   getDoctors() {
