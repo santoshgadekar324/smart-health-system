@@ -98,7 +98,7 @@
           <h5>Ready for a quick health check?</h5>
           <p class="mb-0 opacity-75">Select your symptoms and get an AI-powered disease prediction in seconds.</p>
         </div>
-        <button class="btn sh-btn-primary" onclick="switchTab('symptomChecker')">
+        <button class="btn sh-btn-primary" onclick="document.querySelector('[data-tab=symptomChecker]').click()">
           <i class="bi bi-activity me-2"></i>Start Symptom Check
         </button>
       </div>
@@ -157,9 +157,9 @@
                 Recommended Specialist: <strong id="prSpecialty">—</strong>
               </div>
               <div class="pr-alts mt-3" id="prAlts"></div>
-              <button class="btn sh-btn-primary mt-4" onclick="switchTab('bookAppointment')">
-                <i class="bi bi-calendar-plus me-2"></i> Book Appointment
-              </button>
+<button class="btn sh-btn-primary mt-4" onclick="document.querySelector('[data-tab=bookAppointment]').click()">
+  <i class="bi bi-calendar-plus me-2"></i> Book Appointment
+</button>
             </div>
           </div>
         </div>
