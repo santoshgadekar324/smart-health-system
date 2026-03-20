@@ -119,7 +119,7 @@ const API = {
       Auth.setUser({
         email: res.email,
         role: res.role,
-        fullName: res.fullName
+        fullName: res.name
       });
 
     }
@@ -215,3 +215,22 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("Smart Health System loaded");
 
 });
+// =========================
+// TAB SWITCH (Dashboard fix)
+// =========================
+function switchTab(tabName) {
+
+  console.log("Switching to:", tabName);
+
+  // hide all sections
+  document.querySelectorAll(".tab-content").forEach(el => {
+    el.style.display = "none";
+  });
+
+  // show selected tab
+  const active = document.getElementById(tabName);
+  if (active) {
+    active.style.display = "block";
+  }
+
+}
