@@ -106,7 +106,11 @@
   fullName: document.getElementById('fullName').value.trim(),
   email: document.getElementById('email').value.trim(),
   password: pwd,
-  role: document.getElementById('role').value.toUpperCase()
+  role: document.getElementById('role').value.toUpperCase(),
+
+  phone: document.getElementById('phone').value || "",
+  gender: document.getElementById('gender').value || "",
+  dateOfBirth: document.getElementById('dob').value || ""
 };
 try {
   const res = await API.register(payload);
