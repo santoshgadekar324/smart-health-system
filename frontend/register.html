@@ -51,6 +51,20 @@
               <option value="OTHER">Other</option>
             </select>
           </div>
+          <div class="col-12">
+  <label class="form-label">Specialization</label>
+  <input type="text" id="specialization" class="form-control" placeholder="Cardiologist" />
+</div>
+
+<div class="col-12">
+  <label class="form-label">Qualification</label>
+  <input type="text" id="qualification" class="form-control" placeholder="MBBS, MD" />
+</div>
+
+<div class="col-12">
+  <label class="form-label">Experience (Years)</label>
+  <input type="number" id="experienceYears" class="form-control" placeholder="5" />
+</div>
           <div class="col-md-6">
             <label class="form-label">Date of Birth</label>
             <input type="date" id="dob" class="form-control sh-input" />
@@ -102,7 +116,7 @@
     btn.disabled = true;
     spinner.classList.remove('d-none');
     
- const payload = {
+const payload = {
   fullName: document.getElementById('fullName').value.trim(),
   email: document.getElementById('email').value.trim(),
   password: pwd,
@@ -110,7 +124,12 @@
 
   phone: document.getElementById('phone').value || "",
   gender: document.getElementById('gender').value || "",
-  dateOfBirth: document.getElementById('dob').value || ""
+  dateOfBirth: document.getElementById('dob').value || "",
+
+  // 🔥 ADD THESE (doctor fields)
+  specialization: document.getElementById('specialization')?.value || "",
+  qualification: document.getElementById('qualification')?.value || "",
+  experienceYears: document.getElementById('experienceYears')?.value || 0
 };
 try {
   const res = await API.register(payload);
