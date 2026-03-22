@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Doctor Register</title>
+</head>
+<body>
+
+<h2>Doctor Registration</h2>
+
+<form id="doctorForm">
+  <input type="text" id="name" placeholder="Full Name" required><br>
+  <input type="email" id="email" placeholder="Email" required><br>
+  <input type="password" id="password" placeholder="Password" required><br>
+
+  <input type="text" id="specialization" placeholder="Specialization" required><br>
+  <input type="text" id="qualification" placeholder="Qualification" required><br>
+  <input type="number" id="experience" placeholder="Experience Years" required><br>
+
+  <button type="submit">Register</button>
+</form>
+
+<script src="script.js"></script>
+<script>
+document.getElementById("doctorForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const payload = {
+    fullName: document.getElementById("name").value,
+    email: document.getElementById("email").value,
+    password: document.getElementById("password").value,
+    role: "DOCTOR",
+
+    specialization: document.getElementById("specialization").value,
+    qualification: document.getElementById("qualification").value,
+    experienceYears: document.getElementById("experience").value
+  };
+
+  const res = await API.register(payload);
+
+  if (res && res.token) {
+    alert("Doctor Registered!");
+  }
+});
+</script>
+
+</body>
+</html>
