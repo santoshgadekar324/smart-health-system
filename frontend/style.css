@@ -250,7 +250,23 @@ a:hover { color: var(--teal-dark); }
 
 .fc-label { font-size: 11px; color: var(--text-muted); }
 .fc-val   { font-size: 14px; font-weight: 600; color: var(--text); }
+body {
+  background: #0d1117;
+  color: white;
+}
 
+.register-card {
+  width: 400px;
+  border-radius: 15px;
+}
+
+input {
+  border-radius: 8px !important;
+}
+
+button {
+  border-radius: 8px !important;
+}
 /* ════════════════════════════════════════════════════════════
    SECTIONS (landing page)
    ════════════════════════════════════════════════════════════ */
