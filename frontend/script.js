@@ -244,34 +244,3 @@ function switchTab(tabName) {
   }
 
 }
-document.getElementById("registerForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const payload = {
-    name: document.getElementById("fullName").value,
-    email: document.getElementById("email").value,
-    password: document.getElementById("password").value,
-    role: "PATIENT"
-  };
-
-  try {
-    const res = await fetch("https://smart-health-backend-ohre.onrender.com/api/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      document.getElementById("msg").innerHTML = "✅ Registration Success";
-    } else {
-      document.getElementById("msg").innerHTML = "❌ " + data.message;
-    }
-
-  } catch (err) {
-    document.getElementById("msg").innerHTML = "⚠️ Backend error";
-  }
-});
