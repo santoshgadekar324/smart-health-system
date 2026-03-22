@@ -48,6 +48,27 @@
 
 <!-- ✅ JS -->
 <script src="./script.js"></script>
+<script>
+document.getElementById("registerForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
+  const payload = {
+    fullName: document.getElementById("fullName").value,
+    email: document.getElementById("email").value,
+    password: document.getElementById("password").value,
+    role: "PATIENT"
+  };
+
+  const res = await API.register(payload);
+
+  if (res && res.token) {
+    document.getElementById("msg").innerHTML = "✅ Registration Success";
+    document.getElementById("msg").style.color = "#30d158";
+  } else {
+    document.getElementById("msg").innerHTML = "❌ Failed";
+    document.getElementById("msg").style.color = "#ff5a7e";
+  }
+});
+</script>
 </body>
 </html>
