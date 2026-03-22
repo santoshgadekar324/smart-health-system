@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Patient Register</title>
+</head>
+<body>
+
+<h2>Patient Registration</h2>
+
+<form id="patientForm">
+  <input type="text" id="name" placeholder="Full Name" required><br>
+  <input type="email" id="email" placeholder="Email" required><br>
+  <input type="password" id="password" placeholder="Password" required><br>
+
+  <button type="submit">Register</button>
+</form>
+
+<script src="script.js"></script>
+<script>
+document.getElementById("patientForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const payload = {
+    fullName: document.getElementById("name").value,
+    email: document.getElementById("email").value,
+    password: document.getElementById("password").value,
+    role: "PATIENT"
+  };
+
+  const res = await API.register(payload);
+
+  if (res && res.token) {
+    alert("Patient Registered!");
+  }
+});
+</script>
+
+</body>
+</html>
