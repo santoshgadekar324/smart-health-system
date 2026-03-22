@@ -250,23 +250,6 @@ a:hover { color: var(--teal-dark); }
 
 .fc-label { font-size: 11px; color: var(--text-muted); }
 .fc-val   { font-size: 14px; font-weight: 600; color: var(--text); }
-body {
-  background: #0d1117;
-  color: white;
-}
-
-.register-card {
-  width: 400px;
-  border-radius: 15px;
-}
-
-input {
-  border-radius: 8px !important;
-}
-
-button {
-  border-radius: 8px !important;
-}
 /* ════════════════════════════════════════════════════════════
    SECTIONS (landing page)
    ════════════════════════════════════════════════════════════ */
@@ -821,4 +804,48 @@ button {
 @media (max-width: 576px) {
   .auth-left { display: none !important; }
   .hero-stats { gap: 20px; }
+}
+/* ===== REGISTER PAGE FIX ===== */
+
+.register-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg);
+}
+
+.register-box {
+  background: var(--bg-card);
+  padding: 30px;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.register-box h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-family: 'Syne', sans-serif;
+}
+
+.register-box input {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-3);
+  color: white;
+}
+
+.register-box button {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  background: var(--teal);
+  border: none;
+  font-weight: bold;
 }
