@@ -74,8 +74,8 @@ public class SecurityConfig {
 public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
 
-   configuration.setAllowedOrigins(Arrays.asList(
-    "https://smart-health-system-seven.vercel.app"
+configuration.setAllowedOrigins(Arrays.asList(
+    "https://smart-health-system-smoky.vercel.app"
 ));
 
     configuration.setAllowedMethods(Arrays.asList(
