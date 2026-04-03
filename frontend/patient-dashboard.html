@@ -275,7 +275,7 @@ async function bookAppointment() {
   const doctorId = document.getElementById("doctorSelect").value;
   const date = document.querySelector("input[type='date']").value;
   const time = document.querySelector("input[type='time']").value;
-  const reason = document.querySelector("textarea").value;
+  const reason = document.getElementById("apptReason").value;
 
   if (!doctorId) {
     alert("❌ Please select doctor");
@@ -295,7 +295,6 @@ async function bookAppointment() {
   }
 }
 </script>
-  <script>
 <script>
 function checkSymptoms() {
 
