@@ -285,24 +285,6 @@ document.querySelectorAll(".sidebar-link").forEach(link => {
   });
 
 });
-function loadSymptoms() {
-  const symptoms = ["fever", "cough", "headache"];
-
-  const container = document.getElementById("symptomGrid");
-
-  container.innerHTML = "";
-
-  symptoms.forEach(s => {
-    container.innerHTML += `
-      <label>
-        <input type="checkbox" class="symptom" value="${s}"> ${s}
-      </label><br>
-    `;
-  });
-}
-
-loadSymptoms();
-
 // =====================
 // LOAD ON START
 // =====================
