@@ -1,7 +1,5 @@
-
 /*
- Smart Health System - script.js
- Clean version for backend integration
+ Smart Health System - FINAL CLEAN script.js
 */
 
 const CONFIG = {
@@ -10,11 +8,9 @@ const CONFIG = {
   USER_KEY: "sh_user"
 };
 
-
-/* =========================
-   AUTH STORAGE
-========================= */
-
+// =========================
+// AUTH STORAGE
+// =========================
 const Auth = {
 
   setToken(token) {
@@ -41,22 +37,12 @@ const Auth = {
 
   isLoggedIn() {
     return !!localStorage.getItem(CONFIG.TOKEN_KEY);
-  },
- addSymptoms(symptoms, notes) {
-  return apiFetch("/ai/predict", {
-    method: "POST",
-    body: JSON.stringify({
-      symptoms: symptoms,
-      notes: notes
-    })
-  });
-}
+  }
 };
 
-
-/* =========================
-   API FETCH
-========================= */
+// =========================
+// API FETCH
+// =========================
 async function apiFetch(path, options = {}) {
 
   try {
@@ -77,42 +63,33 @@ async function apiFetch(path, options = {}) {
       headers
     });
 
-    // ❗ Unauthorized
     if (response.status === 401) {
       Auth.clear();
       window.location.href = "login.html";
       return null;
     }
 
-    // ❗ Backend down / error
     if (!response.ok) {
       const text = await response.text();
       throw new Error("Server error: " + response.status + " " + text);
     }
 
-    // ❗ Safe JSON parse
-    const data = await response.json();
-
-    return data;
+    return await response.json();
 
   } catch (error) {
-
     console.error("🔥 API ERROR:", error);
-
-    alert("⚠️ Backend sleeping / slow.\nWait 20 sec and refresh.");
-
+    alert("⚠️ Backend slow / error");
     return null;
   }
 
 }
 
-/* =========================
-   API METHODS
-========================= */
-
+// =========================
+// API METHODS
+// =========================
 const API = {
 
-  /* LOGIN */
+  // LOGIN
   async login(email, password) {
 
     const res = await apiFetch("/auth/login", {
@@ -136,54 +113,52 @@ const API = {
 
   },
 
-
-  /* REGISTER */
+  // REGISTER
   register(payload) {
-  return apiFetch("/auth/register", {
-    method: "POST",
-    body: JSON.stringify({
-      name: payload.fullName,
-      email: payload.email,
-      password: payload.password,
-      role: payload.role,
+    return apiFetch("/auth/register", {
+      method: "POST",
+      body: JSON.stringify({
+        name: payload.fullName,
+        email: payload.email,
+        password: payload.password,
+        role: payload.role
+      })
+    });
+  },
 
-      phone: payload.phone || "",
-      gender: payload.gender || "",
+  // =========================
+  // AI PREDICTION ✅ FIXED
+  // =========================
+  addSymptoms(symptoms, notes) {
+    return apiFetch("/ai/predict", {
+      method: "POST",
+      body: JSON.stringify({
+        symptoms,
+        notes
+      })
+    });
+  },
 
-      specialization: payload.specialization || null,
-      qualification: payload.qualification || null,
-      experienceYears: payload.experienceYears || null
-    })
-  });
-},
-  /* DOCTORS */
-
+  // =========================
+  // DOCTORS
+  // =========================
   getDoctors() {
     return apiFetch("/doctors");
   },
 
-  getDoctorById(id) {
-    return apiFetch(`/doctors/${id}`);
+  getDoctorProfile() {
+    return apiFetch("/doctors/profile");
   },
 
-  getDoctorsBySpecialization(spec) {
-    return apiFetch(`/doctors/specialization/${encodeURIComponent(spec)}`);
-  },
-
-  getAvailableDoctors() {
-    return apiFetch("/doctors/available");
-  },
-
-// =========================
-// DOCTOR PROFILE
-// =========================
-getDoctorProfile() {
-  return apiFetch("/doctors/profile");
-},
-  /* APPOINTMENTS */
-
+  // =========================
+  // APPOINTMENTS
+  // =========================
   getAppointments() {
     return apiFetch("/appointments");
+  },
+
+  getDoctorAppointments() {
+    return apiFetch("/appointments/doctor");
   },
 
   bookAppointment(payload) {
@@ -191,64 +166,38 @@ getDoctorProfile() {
       method: "POST",
       body: JSON.stringify(payload)
     });
+  },
+
+  // =========================
+  // ADMIN
+  // =========================
+  getAllUsers() {
+    return apiFetch("/admin/users");
+  },
+
+  getAllDoctors() {
+    return apiFetch("/admin/doctors");
+  },
+
+  getAllAppointments() {
+    return apiFetch("/admin/appointments");
   }
 
 };
 
-
-/* =========================
-   LOGOUT
-========================= */
-
+// =========================
+// LOGOUT
+// =========================
 function logout() {
-
   Auth.clear();
-
   window.location.href = "login.html";
-
 }
 
-
-/* =========================
-   AUTH GUARD
-========================= */
-
+// =========================
+// AUTH GUARD
+// =========================
 function requireAuth() {
-
   if (!Auth.isLoggedIn()) {
-
     window.location.href = "login.html";
-
   }
-
-}
-
-
-/* =========================
-   INIT
-========================= */
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  console.log("Smart Health System loaded");
-
-});
-// =========================
-// TAB SWITCH (Dashboard fix)
-// =========================
-function switchTab(tabName) {
-
-  console.log("Switching to:", tabName);
-
-  // hide all sections
-  document.querySelectorAll(".tab-content").forEach(el => {
-    el.style.display = "none";
-  });
-
-  // show selected tab
-  const active = document.getElementById(tabName);
-  if (active) {
-    active.style.display = "block";
-  }
-
 }
