@@ -85,3 +85,30 @@ async function loadAppointments() {
 function refreshAppointments() {
   loadAppointments();
 }
+async function updateStatus(id, status) {
+
+  const res = await apiFetch(`/appointments/${id}/status`, {
+    method: "PUT",
+    body: JSON.stringify({ status })
+  });
+
+  if (res) {
+    alert("✅ Updated");
+    loadAppointments();
+  } else {
+    alert("❌ Failed");
+  }
+
+}
+function filterAppointments(status) {
+
+  if (!status) {
+    loadAppointments();
+    return;
+  }
+
+  const filtered = allAppointments.filter(a => a.status === status);
+
+  renderAppointments(filtered);
+
+}
