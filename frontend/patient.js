@@ -302,3 +302,19 @@ function loadSymptoms() {
 }
 
 loadSymptoms();
+const selectedSymptoms = new Set();
+
+document.addEventListener("change", (e) => {
+
+  if (e.target.classList.contains("symptom")) {
+
+    if (e.target.checked) {
+      selectedSymptoms.add(e.target.value);
+    } else {
+      selectedSymptoms.delete(e.target.value);
+    }
+
+    console.log("Selected:", [...selectedSymptoms]);
+  }
+
+});
