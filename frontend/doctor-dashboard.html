@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Doctor Dashboard</title>
 
   <link rel="stylesheet" href="style.css" />
@@ -15,7 +14,7 @@
 
   <!-- HEADER -->
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Doctor Dashboard</h2>
+    <h2>👨‍⚕️ Doctor Dashboard</h2>
     <button class="btn btn-danger" onclick="logout()">Logout</button>
   </div>
 
@@ -27,22 +26,60 @@
     <p><b>Specialization:</b> <span id="doctorSpecialization">-</span></p>
   </div>
 
-  <!-- APPOINTMENTS -->
-  <div class="card p-3 mb-4">
-    <h4>My Appointments</h4>
+  <!-- STATS -->
+  <div class="row mb-4">
 
-    <button class="btn btn-primary mb-3" onclick="refreshAppointments()">
-      Refresh
-    </button>
-
-    <div id="doctorAppointments">
-      <p>Loading appointments...</p>
+    <div class="col-md-3">
+      <div class="card p-3 text-center">
+        <h6>Total</h6>
+        <h3 id="statTotal">0</h3>
+      </div>
     </div>
+
+    <div class="col-md-3">
+      <div class="card p-3 text-center">
+        <h6>Pending</h6>
+        <h3 id="statPending">0</h3>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card p-3 text-center">
+        <h6>Approved</h6>
+        <h3 id="statApproved">0</h3>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card p-3 text-center">
+        <h6>Rejected</h6>
+        <h3 id="statRejected">0</h3>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FILTER -->
+  <div class="mb-3">
+    <select class="form-select" onchange="filterAppointments(this.value)">
+      <option value="">All</option>
+      <option value="PENDING">Pending</option>
+      <option value="APPROVED">Approved</option>
+      <option value="REJECTED">Rejected</option>
+      <option value="COMPLETED">Completed</option>
+    </select>
+  </div>
+
+  <!-- APPOINTMENTS -->
+  <div id="doctorAppointments">
+
+    <p>Loading appointments...</p>
+
   </div>
 
 </div>
 
-<!-- IMPORTANT -->
+<!-- JS -->
 <script src="script.js"></script>
 <script src="doctor.js"></script>
 
