@@ -104,5 +104,17 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
 <script src="script.js"></script>
 <script src="admin.js"></script>
+  <script>
+async function loadUsers() {
+  const users = await apiFetch("/admin/users");
+
+  const container = document.getElementById("usersList");
+  container.innerHTML = "";
+
+  users.forEach(u => {
+    container.innerHTML += `<p>${u.name} - ${u.email}</p>`;
+  });
+}
+</script>
 </body>
 </html>
