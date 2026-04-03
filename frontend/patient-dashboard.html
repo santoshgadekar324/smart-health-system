@@ -208,7 +208,9 @@
                   <label class="form-label">Select Doctor</label>
                   <select id="doctorSelect" class="form-select sh-input" required>
                     <option value="">— Choose a doctor —</option>
+              
                   </select>
+                  <div id="doctorList"></div>
                 </div>
                 <div class="row g-3">
                   <div class="col-md-6">
@@ -244,10 +246,39 @@
 <script src="script.js"></script>
 <script src="patient.js"></script>
   <script>
-async function bookAppointment(doctorId) {
+async function loadDoctors() {
+
+  const doctors = await API.getDoctors();
+
+  const container = document.getElementById("doctorList");
+
+  if (!container) {
+    console.error("❌ doctorList div missing");
+    return;
+  }
+
+  container.innerHTML = "";
+
+  doctors.forEach(doc => {
+    container.innerHTML += `
+      <div style="margin:10px; padding:10px; border:1px solid #444;">
+        <h3>${doc.name}</h3>
+        <p>${doc.specialization || "General"}</p>
+        <button onclick="bookAppointment(${doc.id})">Book</button>
+      </div>
+    `;
+  });
+}
+
+async function bookAppointment(id) {
+
+  if (!id) {
+    alert("❌ Doctor ID missing");
+    return;
+  }
 
   const res = await API.bookAppointment({
-    doctorId: doctorId,
+    doctorId: id,
     date: new Date().toISOString()
   });
 
@@ -257,33 +288,25 @@ async function bookAppointment(doctorId) {
     alert("❌ Failed");
   }
 }
-</script>
- <script>
-async function loadDoctors() {
 
-  const doctors = await API.getDoctors();
+loadDoctors();
+function checkSymptoms() {
 
-  const container = document.getElementById("doctorList");
+  const val = document.getElementById("symptom").value.toLowerCase();
 
-  if (!doctors || doctors.length === 0) {
-    container.innerHTML = "<p>No doctors available</p>";
+  if (!val) {
+    alert("Enter symptom");
     return;
   }
 
-  container.innerHTML = "";
-
-  doctors.forEach(doc => {
-    container.innerHTML += `
-      <div style="border:1px solid #444; padding:10px; margin:10px;">
-        <h3>${doc.name}</h3>
-        <p>Specialization: ${doc.specialization || "N/A"}</p>
-        <button onclick="bookAppointment(${doc.id})">Book</button>
-      </div>
-    `;
-  });
+  if (val.includes("fever")) {
+    alert("🤒 Viral Fever Possible");
+  } else if (val.includes("cough")) {
+    alert("😷 Cold / Cough");
+  } else {
+    alert("🙂 Normal");
+  }
 }
-
-loadDoctors();
 </script>
 </body>
 </html>
