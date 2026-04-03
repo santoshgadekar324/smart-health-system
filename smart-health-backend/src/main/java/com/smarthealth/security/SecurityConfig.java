@@ -47,6 +47,7 @@ public class SecurityConfig {
 
     // बाकी
     .requestMatchers("/api/doctors/**").permitAll()
+     .requestMatchers("/api/appointments/**").permitAll()                                   
     .requestMatchers("/api/predictions/**").permitAll()
 
     .anyRequest().authenticated()
