@@ -243,6 +243,21 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="script.js"></script>
 <script src="patient.js"></script>
+  <script>
+async function bookAppointment(doctorId) {
+
+  const res = await API.bookAppointment({
+    doctorId: doctorId,
+    date: new Date().toISOString()
+  });
+
+  if (res) {
+    alert("✅ Appointment Booked");
+  } else {
+    alert("❌ Failed");
+  }
+}
+</script>
  <script>
 async function loadDoctors() {
 
