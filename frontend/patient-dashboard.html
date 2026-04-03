@@ -109,11 +109,6 @@
     </div>
 
     <!-- ── Symptom Checker Tab ── -->
-    <div>
-  <label><input type="checkbox" value="fever"> Fever</label><br>
-  <label><input type="checkbox" value="cough"> Cough</label><br>
-  <label><input type="checkbox" value="headache"> Headache</label><br>
-</div>
     <div id="tab-symptomChecker" class="dash-tab">
       <div class="row justify-content-center">
         <div class="col-lg-8">
@@ -121,6 +116,11 @@
             <div class="sh-card-header">
               <i class="bi bi-activity me-2"></i> AI Symptom Checker
             </div>
+            <div>
+  <label><input type="checkbox" value="fever"> Fever</label><br>
+  <label><input type="checkbox" value="cough"> Cough</label><br>
+  <label><input type="checkbox" value="headache"> Headache</label><br>
+</div>
             <div class="sh-card-body">
               <p class="text-muted mb-4">Select all symptoms you are currently experiencing:</p>
 
@@ -301,6 +301,7 @@ async function bookAppointment() {
 }
 </script>
   <script>
+<script>
 function checkSymptoms() {
 
   const selected = document.querySelectorAll("input[type='checkbox']:checked");
@@ -314,13 +315,7 @@ function checkSymptoms() {
 
   selected.forEach(s => symptoms.push(s.value));
 
-  if (symptoms.includes("fever")) {
-    alert("🤒 Possible Viral Fever");
-  } else if (symptoms.includes("cough")) {
-    alert("😷 Cold / Cough");
-  } else {
-    alert("🙂 Normal");
-  }
+  alert("Selected: " + symptoms.join(", "));
 }
 </script>
 </body>
