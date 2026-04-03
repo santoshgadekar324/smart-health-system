@@ -117,5 +117,18 @@ async function loadUsers() {
   });
 }
 </script>
+  <script>
+async function loadUsers() {
+
+  const users = await apiFetch("/admin/users");
+
+  const div = document.getElementById("usersList");
+  div.innerHTML = "";
+
+  users.forEach(u => {
+    div.innerHTML += `<p>${u.name} - ${u.role}</p>`;
+  });
+}
+</script>
 </body>
 </html>
