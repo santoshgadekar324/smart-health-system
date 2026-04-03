@@ -243,20 +243,26 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="script.js"></script>
 <script src="patient.js"></script>
-  <script>
+ <script>
 async function loadDoctors() {
 
   const doctors = await API.getDoctors();
 
-  const list = document.getElementById("doctorList");
-  list.innerHTML = "";
+  const container = document.getElementById("doctorList");
 
-  doctors.forEach(d => {
-    list.innerHTML += `
-      <div>
-        <h4>${d.name}</h4>
-        <p>${d.specialization}</p>
-        <button onclick="book(${d.id})">Book</button>
+  if (!doctors || doctors.length === 0) {
+    container.innerHTML = "<p>No doctors available</p>";
+    return;
+  }
+
+  container.innerHTML = "";
+
+  doctors.forEach(doc => {
+    container.innerHTML += `
+      <div style="border:1px solid #444; padding:10px; margin:10px;">
+        <h3>${doc.name}</h3>
+        <p>Specialization: ${doc.specialization || "N/A"}</p>
+        <button onclick="bookAppointment(${doc.id})">Book</button>
       </div>
     `;
   });
