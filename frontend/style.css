@@ -849,3 +849,28 @@ a:hover { color: var(--teal-dark); }
   border: none;
   font-weight: bold;
 }
+
+.symptom-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.symptom-chip {
+  padding: 8px 14px;
+  border-radius: 20px;
+  background: #1e293b;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.3s;
+  border: 1px solid #334155;
+}
+
+.symptom-chip:hover {
+  background: #334155;
+}
+
+.symptom-chip.selected {
+  background: #00d4aa;
+  color: #000;
+}
