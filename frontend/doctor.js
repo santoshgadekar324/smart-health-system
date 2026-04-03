@@ -2,13 +2,14 @@
  * ✅ FINAL CLEAN DOCTOR.JS
  * Full working, no duplicate, no error
  */
-let allAppointments = [];
+
 document.addEventListener("DOMContentLoaded", () => {
 
   requireAuth();
 
   loadDoctorProfile();
   loadAppointments();
+let allAppointments = [];
 
 });
 
@@ -47,37 +48,20 @@ async function loadDoctorProfile() {
 // =========================
 async function loadAppointments() {
 
-  try {
+  const res = await API.getDoctorAppointments();
 
-    const res = await API.getDoctorAppointments();
+  const container = document.getElementById("doctorAppointments");
 
-    const container = document.getElementById("doctorAppointments");
+  if (!container || !res?.data) return;
 
-    if (!container || !res?.data) return;
+  allAppointments = res.data;
 
-    if (res.data.length === 0) {
-      container.innerHTML = "<p>No appointments</p>";
-      return;
-    }
-
-    container.innerHTML = res.data.map(a => `
-      <div style="
-        border:1px solid #ccc;
-        padding:10px;
-        margin-bottom:10px;
-        border-radius:8px;
-      ">
-        <strong>Patient:</strong> ${a.patient?.fullName || "Unknown"} <br>
-        <strong>Date:</strong> ${a.appointmentDate} <br>
-        <strong>Time:</strong> ${a.appointmentTime} <br>
-        <strong>Reason:</strong> ${a.reason || "-"}
-      </div>
-    `).join("");
-
-  } catch (e) {
-    console.log("Appointments load error");
+  if (allAppointments.length === 0) {
+    container.innerHTML = "<p>No appointments</p>";
+    return;
   }
 
+  renderAppointments(allAppointments);
 }
 
 
