@@ -41,8 +41,16 @@ const Auth = {
 
   isLoggedIn() {
     return !!localStorage.getItem(CONFIG.TOKEN_KEY);
-  }
-
+  },
+ addSymptoms(symptoms, notes) {
+  return apiFetch("/ai/predict", {
+    method: "POST",
+    body: JSON.stringify({
+      symptoms: symptoms,
+      notes: notes
+    })
+  });
+}
 };
 
 
