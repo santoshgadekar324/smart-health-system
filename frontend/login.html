@@ -218,28 +218,6 @@ function redirectByRole(role) {
   }
 
 }
-  document.getElementById("loginForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  const res = await API.login(email, password);
-
-  if (res && res.token) {
-
-    if (res.role === "PATIENT") {
-      window.location.href = "patient-dashboard.html";
-    } else if (res.role === "DOCTOR") {
-      window.location.href = "doctor-dashboard.html";
-    } else {
-      window.location.href = "admin-dashboard.html";
-    }
-
-  } else {
-    alert("❌ Login Failed");
-  }
-});
 </script>
 </body>
 </html>
