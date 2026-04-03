@@ -318,3 +318,80 @@ document.addEventListener("change", (e) => {
   }
 
 });
+// =====================
+// DOCTOR LOAD
+// =====================
+async function loadDoctors() {
+
+  const doctors = await API.getDoctors();
+  const select = document.getElementById("doctorSelect");
+
+  if (!select) return;
+
+  select.innerHTML = `<option value="">-- Choose doctor --</option>`;
+
+  doctors.forEach(doc => {
+    select.innerHTML += `
+      <option value="${doc.id}">
+        ${doc.name} (${doc.specialization || "General"})
+      </option>
+    `;
+  });
+}
+
+
+// =====================
+// APPOINTMENT BOOK
+// =====================
+async function bookAppointment() {
+
+  const doctorId = document.getElementById("doctorSelect").value;
+  const date = document.getElementById("apptDate").value;
+  const time = document.getElementById("apptTime").value;
+  const reason = document.getElementById("apptReason").value;
+
+  if (!doctorId) {
+    alert("❌ Select doctor");
+    return;
+  }
+
+  const res = await API.bookAppointment({
+    doctorId: doctorId,
+    date: date + "T" + time,
+    reason: reason
+  });
+
+  if (res) {
+    alert("✅ Appointment Booked");
+  } else {
+    alert("❌ Failed");
+  }
+}
+
+
+// =====================
+// SYMPTOM CHECKER
+// =====================
+function runPrediction() {
+
+  const selected = document.querySelectorAll(".symptom:checked");
+
+  if (selected.length === 0) {
+    alert("❌ Select at least one symptom");
+    return;
+  }
+
+  let symptoms = [];
+
+  selected.forEach(s => symptoms.push(s.value));
+
+  alert("✅ Selected: " + symptoms.join(", "));
+}
+
+
+// =====================
+// LOAD ON START
+// =====================
+document.addEventListener("DOMContentLoaded", () => {
+  loadDoctors();
+});
