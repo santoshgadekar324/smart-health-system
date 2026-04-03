@@ -243,5 +243,26 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="script.js"></script>
 <script src="patient.js"></script>
+  <script>
+async function loadDoctors() {
+
+  const doctors = await API.getDoctors();
+
+  const list = document.getElementById("doctorList");
+  list.innerHTML = "";
+
+  doctors.forEach(d => {
+    list.innerHTML += `
+      <div>
+        <h4>${d.name}</h4>
+        <p>${d.specialization}</p>
+        <button onclick="book(${d.id})">Book</button>
+      </div>
+    `;
+  });
+}
+
+loadDoctors();
+</script>
 </body>
 </html>
