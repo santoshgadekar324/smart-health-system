@@ -41,7 +41,6 @@
 <!-- ✅ JS -->
 <script src="/script.js"></script>
 
-<script>
 document.getElementById("registerForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -54,12 +53,11 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
 
   const res = await API.register(payload);
 
-  if (res && res.token) {
-    document.getElementById("msg").innerHTML = "✅ Registration Success";
-    document.getElementById("msg").style.color = "#30d158";
+  if (res) {
+    alert("✅ Registered Successfully");
+    window.location.href = "login.html";
   } else {
-    document.getElementById("msg").innerHTML = "❌ Failed";
-    document.getElementById("msg").style.color = "#ff5a7e";
+    alert("❌ Failed");
   }
 });
 </script>
