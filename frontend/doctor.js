@@ -2,7 +2,7 @@
  * ✅ FINAL CLEAN DOCTOR.JS
  * Full working, no duplicate, no error
  */
-
+let allAppointments = [];
 document.addEventListener("DOMContentLoaded", () => {
 
   requireAuth();
@@ -40,6 +40,8 @@ async function loadDoctorProfile() {
 }
 
 
+// =========================
+// LOAD APPOINTMENTS
 // =========================
 // LOAD APPOINTMENTS
 // =========================
@@ -111,4 +113,60 @@ function filterAppointments(status) {
 
   renderAppointments(filtered);
 
+}
+function filterAppointments(status) {
+
+  if (!status) {
+    renderAppointments(allAppointments);
+    return;
+  }
+
+  const filtered = allAppointments.filter(a => a.status === status);
+
+  renderAppointments(filtered);
+
+}
+function renderAppointments(list) {
+
+  const container = document.getElementById("doctorAppointments");
+
+  container.innerHTML = list.map(a => `
+
+    <div style="border:1px solid #ccc; padding:10px; margin-bottom:10px; border-radius:8px;">
+
+      <div style="display:flex; justify-content:space-between;">
+        <strong>${a.patient?.fullName || "Patient"}</strong>
+
+        <span style="
+          padding:4px 10px;
+          border-radius:10px;
+          background:${getStatusColor(a.status)};
+          color:white;
+        ">
+          ${a.status}
+        </span>
+      </div>
+
+      <p>${a.appointmentDate} | ${a.appointmentTime}</p>
+      <p>${a.reason || "-"}</p>
+
+      <div>
+        <button onclick="updateStatus(${a.id}, 'APPROVED')">Accept</button>
+        <button onclick="updateStatus(${a.id}, 'REJECTED')">Reject</button>
+        <button onclick="updateStatus(${a.id}, 'COMPLETED')">Complete</button>
+      </div>
+
+    </div>
+
+  `).join("");
+
+}
+function getStatusColor(status) {
+
+  if (status === "PENDING") return "orange";
+  if (status === "APPROVED") return "green";
+  if (status === "REJECTED") return "red";
+  if (status === "COMPLETED") return "blue";
+
+  return "gray";
 }
