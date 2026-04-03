@@ -67,7 +67,7 @@
         </div>
       </div>
 
-      <p class="text-center mt-4">Don't have an account? <a href="register.html" class="sh-link">Register</a></p>
+      <p class="text-center mt-4">Don't have an account? <a href="register-patient.html">Register as Patient</a></p>
     </div>
   </div>
 </div>
@@ -124,8 +124,11 @@ document.addEventListener("DOMContentLoaded", () => {
       if (res && res.token) {
 
         // Save token & user
-        localStorage.setItem("sh_token", res.token);
-        localStorage.setItem("sh_user", JSON.stringify(res));
+       localStorage.setItem("sh_token", res.token);
+localStorage.setItem("sh_user", JSON.stringify({
+  email: res.email,
+  role: res.role
+}));
 
         showAlert("Login successful! Redirecting...", "success");
 
@@ -201,13 +204,18 @@ function showAlert(message, type) {
 ========================= */
 function redirectByRole(role) {
 
-  const routes = {
-    PATIENT: "patient-dashboard.html",
-    DOCTOR: "doctor-dashboard.html",
-    ADMIN: "admin-dashboard.html"
-  };
-
-  window.location.href = routes[role] || "index.html";
+  if (role === "PATIENT") {
+    window.location.href = "patient-dashboard.html";
+  } 
+  else if (role === "DOCTOR") {
+    window.location.href = "doctor-dashboard.html";
+  } 
+  else if (role === "ADMIN") {
+    window.location.href = "admin-dashboard.html";
+  } 
+  else {
+    window.location.href = "index.html";
+  }
 
 }
 </script>
