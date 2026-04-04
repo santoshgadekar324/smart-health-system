@@ -44,7 +44,7 @@ public class SecurityConfig {
 
     // ✅ auth APIs allow
     .requestMatchers("/api/auth/**").permitAll()
-
+    .requestMatchers("/api/ai/**").permitAll()
     // बाकी
     .requestMatchers("/api/doctors/**").permitAll()
      .requestMatchers("/api/appointments/**").permitAll()                                   
