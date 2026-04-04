@@ -129,15 +129,15 @@ const API = {
   // =========================
   // AI PREDICTION ✅ FIXED
   // =========================
-  addSymptoms(symptoms, notes) {
-    return apiFetch("/ai/predict", {
-      method: "POST",
-      body: JSON.stringify({
-        symptoms,
-        notes
-      })
-    });
-  },
+ addSymptoms(symptoms, notes) {
+  return apiFetch("/ai/predict", {
+    method: "POST",
+    body: JSON.stringify({
+      symptoms: symptoms,
+      notes: notes
+    })
+  });
+},
 
   // =========================
   // DOCTORS
